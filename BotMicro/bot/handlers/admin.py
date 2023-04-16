@@ -1,12 +1,13 @@
-from aiogram import F, Bot, Router
+from aiogram import Bot, F, Router
 from aiogram.filters import Command
 from aiogram.fsm.context import FSMContext
 from aiogram.types import Message
-from bot.keyboards.menu import open_menu_btns
-from bot.keyboards.utils import kb_from_btns
-from bot.messages.admin import ASK_ACCESS_KEY, GREET_ADMIN, INCORRECT_ACCESS_KEY
-from bot.states.admin import LoginState
 
+from bot.keyboards.admin import open_admin_menu_btns
+from bot.keyboards.utils import kb_from_btns
+from bot.messages.admin import (ASK_ACCESS_KEY, GREET_ADMIN,
+                                INCORRECT_ACCESS_KEY)
+from bot.states.admin import LoginState
 from bot.utils.init_message import edit_init_message, resend_init_message
 from models.user import User
 
@@ -40,6 +41,6 @@ async def access_key_handler(message: Message, text: str, bot: Bot, state: FSMCo
     await edit_init_message(
         message, bot, state,
         text=GREET_ADMIN(user.name),
-        reply_markup=kb_from_btns(open_menu_btns(user.user_key))
+        reply_markup=kb_from_btns(open_admin_menu_btns(user.user_key))
     )
     await state.clear()
