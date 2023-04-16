@@ -5,7 +5,7 @@ from aiogram.types import Message
 
 from bot.keyboards.admin.menu import open_admin_menu_btns
 from bot.keyboards.utils import kb_from_btns
-from bot.messages.admin import (ASK_ACCESS_KEY, GREET_ADMIN,
+from bot.messages.admin.login import (ASK_ACCESS_KEY, GREET_ADMIN,
                                 INCORRECT_ACCESS_KEY)
 from bot.states.admin import LoginState
 from bot.utils.init_message import edit_init_message, resend_init_message

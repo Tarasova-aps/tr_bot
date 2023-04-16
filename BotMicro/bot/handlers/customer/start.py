@@ -8,7 +8,7 @@ from bot.callbacks.customer.start import (OpenAboutUsCallback,
 from bot.keyboards.customer.menu import open_menu_btns
 from bot.keyboards.customer.start import open_about_us_btns, open_contacts_btns
 from bot.keyboards.utils import kb_from_btns
-from bot.messages.start import ABOUT_US, CONTACTS, GREETING
+from bot.messages.customer.start import ABOUT_US, CONTACTS, GREETING
 from bot.utils.init_message import edit_init_message, resend_init_message
 
 router = Router()
