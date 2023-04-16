@@ -1,6 +1,6 @@
 from aiogram.types import InlineKeyboardButton
 
-from bot.callbacks.start import OpenAboutUsCallback, OpenContactsCallback
+from bot.callbacks.customer.start import OpenAboutUsCallback, OpenContactsCallback
 
 
 def open_about_us_btns():

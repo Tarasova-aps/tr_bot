@@ -2,7 +2,7 @@ from typing import Optional
 
 from aiogram.types import InlineKeyboardButton
 
-from bot.callbacks.admin import OpenAdminMenuCallback
+from bot.callbacks.admins.admin import OpenAdminMenuCallback
 
 
 def open_admin_menu_btns(user_key: Optional[str] = None):
