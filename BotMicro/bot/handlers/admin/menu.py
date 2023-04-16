@@ -1,13 +1,15 @@
 from os import getenv
+
 from aiogram import Router
-from aiogram.types import CallbackQuery, Message
 from aiogram.fsm.context import FSMContext
+from aiogram.types import CallbackQuery, Message
 
 from bot.callbacks.admin.menu import OpenAdminMenuCallback
-from bot.keyboards.admin.menu import open_applications_list_btns, open_users_manage_btns
+from bot.keyboards.admin.menu import open_applications_list_btns
+from bot.keyboards.admin.users import open_users_manage_btns
+from bot.keyboards.utils import kb_from_btns
 from bot.messages.admin.menu import TITLE
 from bot.utils.init_message import update_init_message
-from bot.keyboards.utils import kb_from_btns
 
 router = Router()
 
