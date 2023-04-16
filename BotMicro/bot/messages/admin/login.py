@@ -10,3 +10,4 @@ INCORRECT_ACCESS_KEY = '''
 
 def GREET_ADMIN(name: str):
     return f'''Добро пожаловать, {name}!'''
+
