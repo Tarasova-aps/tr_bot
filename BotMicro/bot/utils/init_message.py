@@ -6,6 +6,22 @@ from aiogram.fsm.context import FSMContext
 from aiogram.types import InlineKeyboardMarkup, Message
 
 
+async def update_init_message(
+    message: Message,
+    state: FSMContext,
+    text: str,
+    reply_markup: Optional[InlineKeyboardMarkup] = None
+) -> Optional[Message]:
+    await message.edit_text(
+        text=text,
+        reply_markup=reply_markup
+    )
+    init_message_id = message.message_id
+    await state.update_data(init_message_id=init_message_id)
+
+    return message
+
+
 async def edit_init_message(
     message: Message,
     bot: Bot,
