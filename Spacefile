@@ -25,3 +25,6 @@ micros:
         - name: EVENTS_LOGS_EXPIRE_AFTER
           description: Time in seconds after which events logs will be deleted. 
           default: "604800"
+        - name: ROOT_ADMIN_KEY
+          description: Secret key for root admin. It is used to access the admin panel.
+        
