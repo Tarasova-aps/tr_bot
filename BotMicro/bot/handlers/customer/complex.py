@@ -7,29 +7,26 @@ from aiogram.types import (BufferedInputFile, CallbackQuery,
                            InputMediaDocument, Message)
 
 from bot.callbacks.customer.apps_dialogs import (ConfirmDocsCallback,
-                                                ContainerTypeCallback)
+                                                 ContainerTypeCallback)
+from bot.callbacks.customer.complex import StartComplexCallback
 from bot.callbacks.customer.confirm import CancelCallback, ConfirmCallback
-from bot.callbacks.customer.container_pickup import \
-    StartContainerPickupCallback
 from bot.keyboards.customer.apps_dialogs import (confirm_docs_btns,
-                                                container_type_btns)
+                                                 container_type_btns)
 from bot.keyboards.customer.confirm import confirm_btns
 from bot.keyboards.customer.menu import open_menu_btns
 from bot.keyboards.utils import kb_from_btns
 from bot.messages.common import WAIT
 from bot.messages.customer.apps_dialogs import (APPLICATION_PICKUP_DATA,
-                                                    ASK_CONFIRMATION,
-                                                    ASK_CONTACTS,
-                                                    ASK_CONTAINER_TYPE,
-                                                    ASK_DOCS,
-                                                    ASK_INCORRECT_WEIGHT,
-                                                    ASK_SPECIAL_CONDITIONS,
-                                                    ASK_TERMINAL,
-                                                    ASK_TERMINAL_DELIVERY,
-                                                    ASK_WAREHOUSE, ASK_WEIGHT,
-                                                    REJECT,
-                                                    SUCCESS_APPLICATION_PICKUP)
-from bot.states.customer import ContainerPickupState
+                                                ASK_CONFIRMATION, ASK_CONTACTS,
+                                                ASK_CONTAINER_TYPE, ASK_DOCS,
+                                                ASK_INCORRECT_WEIGHT,
+                                                ASK_SPECIAL_CONDITIONS,
+                                                ASK_TERMINAL,
+                                                ASK_TERMINAL_DELIVERY,
+                                                ASK_WAREHOUSE, ASK_WEIGHT,
+                                                REJECT,
+                                                SUCCESS_APPLICATION_PICKUP)
+from bot.states.customer import ComplexState
 from bot.utils.application import spread_application_to_admins
 from models.application import Application
 from models.user import User
@@ -38,48 +35,48 @@ from utils.drive import download_file, upload_file
 router = Router()
 
 
-@router.callback_query(StartContainerPickupCallback.filter())
-async def start_container_pickup_handler(query: CallbackQuery, message: Message, callback_data: StartContainerPickupCallback, state: FSMContext):
+@router.callback_query(StartComplexCallback.filter())
+async def start_complex_handler(query: CallbackQuery, message: Message, callback_data: StartComplexCallback, state: FSMContext):
     await message.answer(
         text=ASK_CONTAINER_TYPE,
         reply_markup=kb_from_btns(container_type_btns())
     )
-    await state.set_state(ContainerPickupState.container_type)
+    await state.set_state(ComplexState.container_type)
 
 
-@router.callback_query(ContainerPickupState.container_type, ContainerTypeCallback.filter())
+@router.callback_query(ComplexState.container_type, ContainerTypeCallback.filter())
 async def container_type_handler(query: CallbackQuery, message: Message, callback_data: ContainerTypeCallback, state: FSMContext):
     await state.update_data(container_type=callback_data.container_type)
 
     await message.answer(text=ASK_TERMINAL)
-    await state.set_state(ContainerPickupState.terminal)
+    await state.set_state(ComplexState.terminal)
 
 
-@router.message(ContainerPickupState.terminal, F.text)
+@router.message(ComplexState.terminal, F.text)
 async def terminal_handler(message: Message, state: FSMContext):
     await state.update_data(terminal=message.text)
 
     await message.answer(text=ASK_WAREHOUSE)
-    await state.set_state(ContainerPickupState.warehouse)
+    await state.set_state(ComplexState.warehouse)
 
 
-@router.message(ContainerPickupState.warehouse, F.text)
+@router.message(ComplexState.warehouse, F.text)
 async def warehouse_handler(message: Message, state: FSMContext):
     await state.update_data(warehouse=message.text)
 
     await message.answer(text=ASK_TERMINAL_DELIVERY)
-    await state.set_state(ContainerPickupState.terminal_delivery)
+    await state.set_state(ComplexState.terminal_delivery)
 
 
-@router.message(ContainerPickupState.terminal_delivery, F.text)
+@router.message(ComplexState.terminal_delivery, F.text)
 async def terminal_delivery_handler(message: Message, state: FSMContext):
     await state.update_data(terminal_delivery=message.text)
 
     await message.answer(text=ASK_WEIGHT)
-    await state.set_state(ContainerPickupState.weight)
+    await state.set_state(ComplexState.weight)
 
 
-@router.message(ContainerPickupState.weight, F.text, F.text.as_('text'))
+@router.message(ComplexState.weight, F.text, F.text.as_('text'))
 async def weight_handler(message: Message, text: str, state: FSMContext):
     try:
         weight = int(text)
@@ -90,18 +87,18 @@ async def weight_handler(message: Message, text: str, state: FSMContext):
     await state.update_data(weight=weight)
 
     await message.answer(text=ASK_SPECIAL_CONDITIONS)
-    await state.set_state(ContainerPickupState.special_conditions)
+    await state.set_state(ComplexState.special_conditions)
 
 
-@router.message(ContainerPickupState.special_conditions, F.text)
+@router.message(ComplexState.special_conditions, F.text)
 async def special_conditions_handler(message: Message, state: FSMContext):
     await state.update_data(special_conditions=message.text)
 
     await message.answer(text=ASK_CONTACTS)
-    await state.set_state(ContainerPickupState.contacts)
+    await state.set_state(ComplexState.contacts)
 
 
-@router.message(ContainerPickupState.contacts, F.text)
+@router.message(ComplexState.contacts, F.text)
 async def contacts_handler(message: Message, bot: Bot, state: FSMContext):
     await state.update_data(contacts=message.text)
 
@@ -121,8 +118,8 @@ async def contacts_handler(message: Message, bot: Bot, state: FSMContext):
     media_price_file = InputMediaDocument(media=prices_file)  # type: ignore
 
     application_file = BufferedInputFile(
-        download_file('docs', 'application_pickup.doc'),
-        filename='application_pickup.doc'
+        download_file('docs', 'application_complex.docx'),
+        filename='application_complex.docx'
     )
     media_application_file = InputMediaDocument(media=application_file)  # type: ignore
 
@@ -131,10 +128,10 @@ async def contacts_handler(message: Message, bot: Bot, state: FSMContext):
         media=[media_price_file, media_application_file]
     )
     await state.update_data(docs=[])
-    await state.set_state(ContainerPickupState.docs)
+    await state.set_state(ComplexState.docs)
 
 
-@router.message(ContainerPickupState.docs, F.photo | F.document)
+@router.message(ComplexState.docs, F.photo | F.document)
 async def docs_handler(message: Message, bot: Bot, state: FSMContext):
     await bot.send_chat_action(chat_id=message.chat.id, action=ChatAction.UPLOAD_DOCUMENT)
 
@@ -164,7 +161,7 @@ async def docs_handler(message: Message, bot: Bot, state: FSMContext):
     )
 
 
-@router.callback_query(ContainerPickupState.docs, ConfirmDocsCallback.filter())
+@router.callback_query(ComplexState.docs, ConfirmDocsCallback.filter())
 async def confirm_docs_handler(query: CallbackQuery, message: Message, callback_data: ConfirmDocsCallback, bot: Bot, state: FSMContext):
     data = await state.get_data()
     application_description = APPLICATION_PICKUP_DATA(
@@ -181,16 +178,16 @@ async def confirm_docs_handler(query: CallbackQuery, message: Message, callback_
         text=ASK_CONFIRMATION + '\n' + application_description,
         reply_markup=kb_from_btns(confirm_btns())
     )
-    await state.set_state(ContainerPickupState.confirmation)
+    await state.set_state(ComplexState.confirmation)
 
 
-@router.callback_query(ContainerPickupState.confirmation, ConfirmCallback.filter())
+@router.callback_query(ComplexState.confirmation, ConfirmCallback.filter())
 async def confirmation_handler(query: CallbackQuery, message: Message, callback_data: ConfirmDocsCallback, bot: Bot, state: FSMContext):
     await message.answer(text=WAIT)
 
     data = await state.get_data()
     application_data = {
-        'Тип заявки': 'Запрос на автовывоз контейнера',
+        'Тип заявки': 'Запрос на прием и раскредитацию контейнера и автодоставку (комплекс)',
         'Тип контейнера': data['container_type'],
         'Терминал постановки': data['terminal'],
         'Склад': data['warehouse'],
