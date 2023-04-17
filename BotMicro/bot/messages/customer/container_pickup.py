@@ -1,6 +1,14 @@
-ASK_DOCS = '''
+def ASK_DOCS(docs_count: int = 0):
+    text = '''
 Скачайте прикрепленные документы и пришлите сканы с подписью.
+
+Нажмите "Продолжить", когда все документы будут отправлены.
 '''
+    if docs_count:
+        text += f'\nЗагружено <b>{docs_count}</b> документов.'
+
+    return text
+
 
 ASK_DOCS_CONFIRMATION = '''
 Подтвердите отправку документов, когда все документы будут отправлены.
@@ -35,6 +43,10 @@ ASK_SPECIAL_CONDITIONS = '''
 Введите особые условия:
 '''
 
+ASK_CONTACTS = '''
+Укажите данные для связи с вами (телефон, email):
+'''
+
 ASK_CONFIRMATION = '''
 Подтвердите введенные данные:
 '''
@@ -54,7 +66,8 @@ def APPLICATION_PICKUP_DATA(
     warehouse: str,
     terminal_delivery: str,
     weight: str,
-    special_conditions: str
+    special_conditions: str,
+    contacts: str
 ):
     return f'''
 <b>Тип контейнера:</b> {container_type}
@@ -63,4 +76,5 @@ def APPLICATION_PICKUP_DATA(
 <b>Терминал сдачи:</b> {terminal_delivery}
 <b>Вес:</b> {weight}
 <b>Особые условия:</b> {special_conditions}
+<b>Контакты:</b> {contacts}
 '''

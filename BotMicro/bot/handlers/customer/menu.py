@@ -6,7 +6,7 @@ from aiogram.types import CallbackQuery, Message
 
 from bot.callbacks.customer.menu import OpenMenuCallback
 from bot.keyboards.customer.complex import start_complex_btns
-from bot.keyboards.customer.container_pickup import start_container_pickup_btns
+from bot.keyboards.customer.apps_dialog import start_container_pickup_btns
 from bot.keyboards.customer.info import open_info_btns
 from bot.keyboards.customer.partnership import start_partnership_btns
 from bot.keyboards.customer.work import start_work_btns

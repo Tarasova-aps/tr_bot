@@ -1,8 +1,9 @@
 from aiogram.types import InlineKeyboardButton
 
+from bot.callbacks.customer.apps_dialog import (ConfirmDocsCallback,
+                                                ContainerTypeCallback)
 from bot.callbacks.customer.container_pickup import \
     StartContainerPickupCallback
-from bot.callbacks.customer.container_type import ContainerTypeCallback
 
 
 def start_container_pickup_btns():
@@ -56,6 +57,17 @@ def container_type_btns():
             InlineKeyboardButton(
                 text='40 Опентоп',
                 callback_data=ContainerTypeCallback(container_type='40 Опентоп').pack()
+            )
+        ]
+    ]
+
+
+def confirm_docs_btns():
+    return [
+        [
+            InlineKeyboardButton(
+                text='Продолжить',
+                callback_data=ConfirmDocsCallback().pack()
             )
         ]
     ]
