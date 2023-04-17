@@ -11,7 +11,7 @@ from bot.callbacks.customer.apps_dialogs import (ConfirmDocsCallback,
 from bot.callbacks.customer.complex import StartComplexCallback
 from bot.callbacks.customer.confirm import CancelCallback, ConfirmCallback
 from bot.keyboards.customer.apps_dialogs import (confirm_docs_btns,
-                                                 container_type_btns)
+                                                 container_type_btns, skip_contacts_btns)
 from bot.keyboards.customer.confirm import confirm_btns
 from bot.keyboards.customer.menu import open_menu_btns
 from bot.keyboards.utils import kb_from_btns
@@ -48,7 +48,10 @@ async def start_complex_handler(query: CallbackQuery, message: Message, callback
 async def container_type_handler(query: CallbackQuery, message: Message, callback_data: ContainerTypeCallback, state: FSMContext):
     await state.update_data(container_type=callback_data.container_type)
 
-    await message.answer(text=ASK_TERMINAL)
+    await message.answer(
+        text=ASK_TERMINAL,
+        reply_markup=kb_from_btns(open_menu_btns())
+    )
     await state.set_state(ComplexState.terminal)
 
 
@@ -56,7 +59,10 @@ async def container_type_handler(query: CallbackQuery, message: Message, callbac
 async def terminal_handler(message: Message, state: FSMContext):
     await state.update_data(terminal=message.text)
 
-    await message.answer(text=ASK_WAREHOUSE)
+    await message.answer(
+        text=ASK_WAREHOUSE,
+        reply_markup=kb_from_btns(open_menu_btns())
+    )
     await state.set_state(ComplexState.warehouse)
 
 
@@ -64,7 +70,10 @@ async def terminal_handler(message: Message, state: FSMContext):
 async def warehouse_handler(message: Message, state: FSMContext):
     await state.update_data(warehouse=message.text)
 
-    await message.answer(text=ASK_TERMINAL_DELIVERY)
+    await message.answer(
+        text=ASK_TERMINAL_DELIVERY,
+        reply_markup=kb_from_btns(open_menu_btns())
+    )
     await state.set_state(ComplexState.terminal_delivery)
 
 
@@ -72,7 +81,10 @@ async def warehouse_handler(message: Message, state: FSMContext):
 async def terminal_delivery_handler(message: Message, state: FSMContext):
     await state.update_data(terminal_delivery=message.text)
 
-    await message.answer(text=ASK_WEIGHT)
+    await message.answer(
+        text=ASK_WEIGHT,
+        reply_markup=kb_from_btns(open_menu_btns())
+    )
     await state.set_state(ComplexState.weight)
 
 
@@ -81,12 +93,18 @@ async def weight_handler(message: Message, text: str, state: FSMContext):
     try:
         weight = int(text)
     except ValueError:
-        await message.answer(text=ASK_INCORRECT_WEIGHT)
+        await message.answer(
+            text=ASK_INCORRECT_WEIGHT,
+            reply_markup=kb_from_btns(open_menu_btns())
+        )
         return
 
     await state.update_data(weight=weight)
 
-    await message.answer(text=ASK_SPECIAL_CONDITIONS)
+    await message.answer(
+        text=ASK_SPECIAL_CONDITIONS,
+        reply_markup=kb_from_btns(open_menu_btns())
+    )
     await state.set_state(ComplexState.special_conditions)
 
 
@@ -94,7 +112,11 @@ async def weight_handler(message: Message, text: str, state: FSMContext):
 async def special_conditions_handler(message: Message, state: FSMContext):
     await state.update_data(special_conditions=message.text)
 
-    await message.answer(text=ASK_CONTACTS)
+    btns = [skip_contacts_btns(), open_menu_btns()] if message.chat.username else [open_menu_btns()]
+    await message.answer(
+        text=ASK_CONTACTS(message.chat.username),
+        reply_markup=kb_from_btns(*btns) 
+    )
     await state.set_state(ComplexState.contacts)
 
 
@@ -183,7 +205,10 @@ async def confirm_docs_handler(query: CallbackQuery, message: Message, callback_
 
 @router.callback_query(ComplexState.confirmation, ConfirmCallback.filter())
 async def confirmation_handler(query: CallbackQuery, message: Message, callback_data: ConfirmDocsCallback, bot: Bot, state: FSMContext):
-    await message.answer(text=WAIT)
+    await message.answer(
+        text=WAIT,
+        reply_markup=kb_from_btns(open_menu_btns())
+    )
 
     data = await state.get_data()
     application_data = {
@@ -196,7 +221,7 @@ async def confirmation_handler(query: CallbackQuery, message: Message, callback_
         'Специальные условия': data['special_conditions'],
         'Контакты': data['contacts'],
     }
-    if message.from_user and message.from_user.username:
+    if message.chat.username:
         application_data['Telegram'] = f'https://t.me/{message.chat.username}'
 
     application = Application(

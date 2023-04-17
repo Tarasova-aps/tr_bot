@@ -1,7 +1,7 @@
 from aiogram.types import InlineKeyboardButton
 
 from bot.callbacks.customer.apps_dialogs import (ConfirmDocsCallback,
-                                                ContainerTypeCallback)
+                                                 ContainerTypeCallback, SkipContactsCallback)
 from bot.callbacks.customer.container_pickup import \
     StartContainerPickupCallback
 
@@ -68,6 +68,17 @@ def confirm_docs_btns():
             InlineKeyboardButton(
                 text='Продолжить',
                 callback_data=ConfirmDocsCallback().pack()
+            )
+        ]
+    ]
+
+
+def skip_contacts_btns():
+    return [
+        [
+            InlineKeyboardButton(
+                text='Пропустить',
+                callback_data=SkipContactsCallback().pack()
             )
         ]
     ]

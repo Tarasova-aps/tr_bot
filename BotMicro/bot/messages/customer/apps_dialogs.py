@@ -1,3 +1,6 @@
+from typing import Optional
+
+
 def ASK_DOCS(docs_count: int = 0):
     text = '''
 Скачайте прикрепленные документы и пришлите сканы с подписью.
@@ -23,7 +26,7 @@ ASK_TERMINAL = '''
 '''
 
 ASK_WAREHOUSE = '''
-Введите склад:
+Адрес склада выгрузки или погрузки контейнера:
 '''
 
 ASK_TERMINAL_DELIVERY = '''
@@ -43,9 +46,18 @@ ASK_SPECIAL_CONDITIONS = '''
 Введите особые условия:
 '''
 
-ASK_CONTACTS = '''
-Укажите данные для связи с вами (телефон, email):
+
+def ASK_CONTACTS(username: Optional[str]):
+    if username is None:
+        return '''
+Укажите дополнительные контакты для связи:
 '''
+
+    return f'''
+Если хотите, вы можете указать дополнительные контакты для связи.
+Текущий контакт: https://t.me/{username}
+'''
+
 
 ASK_CONFIRMATION = '''
 Подтвердите введенные данные:
