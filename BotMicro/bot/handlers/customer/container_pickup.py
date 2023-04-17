@@ -6,22 +6,19 @@ from aiogram.fsm.context import FSMContext
 from aiogram.types import (BufferedInputFile, CallbackQuery,
                            InputMediaDocument, Message)
 
-from bot.callbacks.customer.apps_dialogs import (ConfirmDocsCallback,
-                                                 ContainerTypeCallback)
+from bot.callbacks.customer.apps_dialogs import ConfirmDocsCallback
 from bot.callbacks.customer.confirm import CancelCallback, ConfirmCallback
 from bot.callbacks.customer.container_pickup import \
     StartContainerPickupCallback
 from bot.keyboards.customer.apps_dialogs import (confirm_docs_btns,
-                                                 container_type_btns, skip_contacts_btns)
+                                                 skip_contacts_btns)
 from bot.keyboards.customer.confirm import confirm_btns
 from bot.keyboards.customer.menu import open_menu_btns
 from bot.keyboards.utils import kb_from_btns
 from bot.messages.common import WAIT
 from bot.messages.customer.apps_dialogs import (APPLICATION_PICKUP_DATA,
-                                                ASK_CONFIRMATION,
-                                                ASK_CONTACTS,
-                                                ASK_CONTAINER_TYPE,
-                                                ASK_DOCS,
+                                                ASK_CONFIRMATION, ASK_CONTACTS,
+                                                ASK_CONTAINER_TYPE, ASK_DOCS,
                                                 ASK_INCORRECT_WEIGHT,
                                                 ASK_SPECIAL_CONDITIONS,
                                                 ASK_TERMINAL,
@@ -42,14 +39,14 @@ router = Router()
 async def start_container_pickup_handler(query: CallbackQuery, message: Message, callback_data: StartContainerPickupCallback, state: FSMContext):
     await message.answer(
         text=ASK_CONTAINER_TYPE,
-        reply_markup=kb_from_btns(container_type_btns())
+        reply_markup=kb_from_btns(open_menu_btns())
     )
     await state.set_state(ContainerPickupState.container_type)
 
 
-@router.callback_query(ContainerPickupState.container_type, ContainerTypeCallback.filter())
-async def container_type_handler(query: CallbackQuery, message: Message, callback_data: ContainerTypeCallback, state: FSMContext):
-    await state.update_data(container_type=callback_data.container_type)
+@router.message(ContainerPickupState.container_type, F.text)
+async def container_type_handler(message: Message, state: FSMContext):
+    await state.update_data(container_type=message.text)
 
     await message.answer(
         text=ASK_TERMINAL,

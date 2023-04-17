@@ -6,12 +6,10 @@ from aiogram.fsm.context import FSMContext
 from aiogram.types import (BufferedInputFile, CallbackQuery,
                            InputMediaDocument, Message)
 
-from bot.callbacks.customer.apps_dialogs import (ConfirmDocsCallback,
-                                                 ContainerTypeCallback)
+from bot.callbacks.customer.apps_dialogs import ConfirmDocsCallback
 from bot.callbacks.customer.complex import StartComplexCallback
 from bot.callbacks.customer.confirm import CancelCallback, ConfirmCallback
-from bot.keyboards.customer.apps_dialogs import (confirm_docs_btns,
-                                                 container_type_btns, skip_contacts_btns)
+from bot.keyboards.customer.apps_dialogs import confirm_docs_btns, skip_contacts_btns
 from bot.keyboards.customer.confirm import confirm_btns
 from bot.keyboards.customer.menu import open_menu_btns
 from bot.keyboards.utils import kb_from_btns
@@ -39,14 +37,14 @@ router = Router()
 async def start_complex_handler(query: CallbackQuery, message: Message, callback_data: StartComplexCallback, state: FSMContext):
     await message.answer(
         text=ASK_CONTAINER_TYPE,
-        reply_markup=kb_from_btns(container_type_btns())
+        reply_markup=kb_from_btns(open_menu_btns())
     )
     await state.set_state(ComplexState.container_type)
 
 
-@router.callback_query(ComplexState.container_type, ContainerTypeCallback.filter())
-async def container_type_handler(query: CallbackQuery, message: Message, callback_data: ContainerTypeCallback, state: FSMContext):
-    await state.update_data(container_type=callback_data.container_type)
+@router.message(ComplexState.container_type, F.text)
+async def container_type_handler(message: Message, state: FSMContext):
+    await state.update_data(container_type=message.text)
 
     await message.answer(
         text=ASK_TERMINAL,
@@ -115,7 +113,7 @@ async def special_conditions_handler(message: Message, state: FSMContext):
     btns = [skip_contacts_btns(), open_menu_btns()] if message.chat.username else [open_menu_btns()]
     await message.answer(
         text=ASK_CONTACTS(message.chat.username),
-        reply_markup=kb_from_btns(*btns) 
+        reply_markup=kb_from_btns(*btns)
     )
     await state.set_state(ComplexState.contacts)
 

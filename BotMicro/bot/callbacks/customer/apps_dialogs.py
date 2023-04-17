@@ -5,9 +5,5 @@ class ConfirmDocsCallback(CallbackData, prefix='confirm_docs'):
     pass
 
 
-class ContainerTypeCallback(CallbackData, prefix='container_type'):
-    container_type: str
-
-
 class SkipContactsCallback(CallbackData, prefix='skip_contacts'):
     pass
