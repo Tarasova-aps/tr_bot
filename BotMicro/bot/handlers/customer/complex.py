@@ -6,7 +6,7 @@ from aiogram.fsm.context import FSMContext
 from aiogram.types import (BufferedInputFile, CallbackQuery,
                            InputMediaDocument, Message)
 
-from bot.callbacks.customer.apps_dialogs import ConfirmDocsCallback
+from bot.callbacks.customer.apps_dialogs import ConfirmDocsCallback, SkipContactsCallback
 from bot.callbacks.customer.complex import StartComplexCallback
 from bot.callbacks.customer.confirm import CancelCallback, ConfirmCallback
 from bot.keyboards.customer.apps_dialogs import confirm_docs_btns, skip_contacts_btns
@@ -116,6 +116,12 @@ async def special_conditions_handler(message: Message, state: FSMContext):
         reply_markup=kb_from_btns(*btns)
     )
     await state.set_state(ComplexState.contacts)
+
+
+@router.callback_query(SkipContactsCallback.filter())
+async def skip_contacts_handler(query: CallbackQuery, message: Message, callback_data: SkipContactsCallback, bot: Bot, state: FSMContext):
+    await contacts_handler(message, bot, state)
+    await state.update_data(contacts='')
 
 
 @router.message(ComplexState.contacts, F.text)
