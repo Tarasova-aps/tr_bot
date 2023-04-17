@@ -130,6 +130,7 @@ async def contacts_handler(message: Message, bot: Bot, state: FSMContext):
         chat_id=message.chat.id,
         media=[media_price_file, media_application_file]
     )
+    await state.update_data(docs=[])
     await state.set_state(ContainerPickupState.docs)
 
 
