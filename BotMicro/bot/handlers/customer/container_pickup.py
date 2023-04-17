@@ -6,18 +6,18 @@ from aiogram.fsm.context import FSMContext
 from aiogram.types import (BufferedInputFile, CallbackQuery,
                            InputMediaDocument, Message)
 
-from bot.callbacks.customer.apps_dialog import (ConfirmDocsCallback,
+from bot.callbacks.customer.apps_dialogs import (ConfirmDocsCallback,
                                                 ContainerTypeCallback)
 from bot.callbacks.customer.confirm import CancelCallback, ConfirmCallback
 from bot.callbacks.customer.container_pickup import \
     StartContainerPickupCallback
-from bot.keyboards.customer.apps_dialog import (confirm_docs_btns,
+from bot.keyboards.customer.apps_dialogs import (confirm_docs_btns,
                                                 container_type_btns)
 from bot.keyboards.customer.confirm import confirm_btns
 from bot.keyboards.customer.menu import open_menu_btns
 from bot.keyboards.utils import kb_from_btns
 from bot.messages.common import WAIT
-from bot.messages.customer.container_pickup import (APPLICATION_PICKUP_DATA,
+from bot.messages.customer.apps_dialogs import (APPLICATION_PICKUP_DATA,
                                                     ASK_CONFIRMATION,
                                                     ASK_CONTACTS,
                                                     ASK_CONTAINER_TYPE,

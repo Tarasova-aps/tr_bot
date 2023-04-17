@@ -1,6 +1,6 @@
 from aiogram.types import InlineKeyboardButton
 
-from bot.callbacks.customer.apps_dialog import (ConfirmDocsCallback,
+from bot.callbacks.customer.apps_dialogs import (ConfirmDocsCallback,
                                                 ContainerTypeCallback)
 from bot.callbacks.customer.container_pickup import \
     StartContainerPickupCallback
