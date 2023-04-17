@@ -197,7 +197,7 @@ async def confirmation_handler(query: CallbackQuery, message: Message, callback_
         'Контакты': data['contacts'],
     }
     if message.from_user and message.from_user.username:
-        application_data['Telegram'] = f'https://t.me/{message.from_user.username}'
+        application_data['Telegram'] = f'https://t.me/{message.chat.username}'
 
     application = Application(
         creator_user_id=message.chat.id,  # type: ignore
