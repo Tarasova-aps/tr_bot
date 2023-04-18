@@ -1,5 +1,9 @@
 from typing import Optional
 
+ASK_PARTNERSHIP_OFFER = '''
+Оставьте сообщение с предложением о сотрудничестве.
+'''
+
 
 def ASK_DOCS(docs_count: int = 0):
     text = '''
@@ -50,7 +54,7 @@ ASK_SPECIAL_CONDITIONS = '''
 def ASK_CONTACTS(username: Optional[str]):
     if username is None:
         return '''
-Укажите дополнительные контакты для связи:
+Укажите контакты для связи:
 '''
 
     return f'''
@@ -67,7 +71,7 @@ REJECT = '''
 Данные отклонены
 '''
 
-SUCCESS_APPLICATION_PICKUP = '''
+SUCCESS_APPLICATION = '''
 Заявка отправлена администраторам.
 '''
 
@@ -88,5 +92,15 @@ def APPLICATION_PICKUP_DATA(
 <b>Терминал сдачи:</b> {terminal_delivery}
 <b>Вес:</b> {weight}
 <b>Особые условия:</b> {special_conditions}
+<b>Контакты:</b> {contacts}
+'''
+
+
+def APPLICATION_PARTNERSHIP_DATA(
+    partnership_offer: str,
+    contacts: str
+):
+    return f'''
+<b>Предложение о сотрудничестве:</b> {partnership_offer}
 <b>Контакты:</b> {contacts}
 '''

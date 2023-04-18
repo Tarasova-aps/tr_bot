@@ -23,3 +23,10 @@ class ComplexState(StatesGroup):
     docs = State()
     contacts = State()
     confirmation = State()
+
+
+class PartnershipState(StatesGroup):
+    partnership_offer = State()
+    contacts = State()
+    confirmation = State()
+

@@ -6,10 +6,12 @@ from aiogram.fsm.context import FSMContext
 from aiogram.types import (BufferedInputFile, CallbackQuery,
                            InputMediaDocument, Message)
 
-from bot.callbacks.customer.apps_dialogs import ConfirmDocsCallback, SkipContactsCallback
+from bot.callbacks.customer.apps_dialogs import (ConfirmDocsCallback,
+                                                 SkipContactsCallback)
 from bot.callbacks.customer.complex import StartComplexCallback
 from bot.callbacks.customer.confirm import CancelCallback, ConfirmCallback
-from bot.keyboards.customer.apps_dialogs import confirm_docs_btns, skip_contacts_btns
+from bot.keyboards.customer.apps_dialogs import (confirm_docs_btns,
+                                                 skip_contacts_btns)
 from bot.keyboards.customer.confirm import confirm_btns
 from bot.keyboards.customer.menu import open_menu_btns
 from bot.keyboards.utils import kb_from_btns
@@ -22,8 +24,7 @@ from bot.messages.customer.apps_dialogs import (APPLICATION_PICKUP_DATA,
                                                 ASK_TERMINAL,
                                                 ASK_TERMINAL_DELIVERY,
                                                 ASK_WAREHOUSE, ASK_WEIGHT,
-                                                REJECT,
-                                                SUCCESS_APPLICATION_PICKUP)
+                                                REJECT, SUCCESS_APPLICATION)
 from bot.states.customer import ComplexState
 from bot.utils.application import spread_application_to_admins
 from models.application import Application
@@ -239,7 +240,7 @@ async def confirmation_handler(query: CallbackQuery, message: Message, callback_
     await spread_application_to_admins(application, admins, bot)
 
     await message.answer(
-        text=SUCCESS_APPLICATION_PICKUP,
+        text=SUCCESS_APPLICATION,
         reply_markup=kb_from_btns(open_menu_btns())
     )
     await state.clear()

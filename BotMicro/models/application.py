@@ -12,8 +12,8 @@ class Application(AsyncDetaModel):
 
     data: dict[str, Any]
 
-    files: list[tuple[str, str]] # drive, file_name
-    
+    files: list[tuple[str, str]] = Field(default_factory=list)  # drive, file_name
+
     @property
     def app_key(self) -> str:
         return str(self.key)
