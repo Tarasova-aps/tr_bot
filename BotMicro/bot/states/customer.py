@@ -30,3 +30,8 @@ class PartnershipState(StatesGroup):
     contacts = State()
     confirmation = State()
 
+
+class WorkState(StatesGroup):
+    cv = State()
+    confirmation = State()
+    
