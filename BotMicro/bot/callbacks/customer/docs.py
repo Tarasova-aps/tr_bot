@@ -1,5 +1,5 @@
 from aiogram.filters.callback_data import CallbackData
 
 
-class OpenInfoCallback(CallbackData, prefix='open_info'):
+class OpenDocsCallback(CallbackData, prefix='open_docs'):
     pass
