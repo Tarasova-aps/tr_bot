@@ -1,13 +1,13 @@
 from aiogram.types import InlineKeyboardButton
 
-from bot.callbacks.customer.docs import OpenDocsCallback
+from bot.callbacks.docs import OpenDocsCallback
 
 
-def open_info_btns():
+def open_docs_btns():
     return [
         [
             InlineKeyboardButton(
-                text='Документы и контакты',
+                text='Документы',
                 callback_data=OpenDocsCallback().pack()
             )
         ]

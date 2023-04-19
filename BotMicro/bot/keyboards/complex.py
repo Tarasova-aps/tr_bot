@@ -1,14 +1,12 @@
 from aiogram.types import InlineKeyboardButton
 
-from bot.callbacks.customer.complex import StartComplexCallback
-
 
 def start_complex_btns():
     return [
         [
             InlineKeyboardButton(
                 text='Запрос на прием и раскредитацию контейнера и автодоставку',
-                callback_data=StartComplexCallback().pack()
+                url='https://forms.yandex.ru/u/643fe42669387211fd48300f/'
             )
         ]
     ]
