@@ -1,7 +1,8 @@
 from aiogram.types import InlineKeyboardButton
 
 from bot.callbacks.admin.users import (DeleteUserCallback, NewAdminCallback,
-                                       OpenUserPageCallback, OpenUsersManageCallback)
+                                       OpenUserPageCallback,
+                                       OpenUsersManageCallback)
 from models.user import User
 
 
