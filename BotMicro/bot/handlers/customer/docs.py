@@ -4,7 +4,7 @@ from aiogram.fsm.context import FSMContext
 from aiogram.types import (BufferedInputFile, CallbackQuery,
                            InputMediaDocument, Message)
 
-from bot.callbacks.docs import OpenDocsCallback
+from bot.callbacks.customer.docs import OpenDocsCallback
 from utils.drive import download_file
 
 router = Router()
@@ -13,7 +13,7 @@ router = Router()
 @router.callback_query(OpenDocsCallback.filter())
 async def start_container_pickup_handler(query: CallbackQuery, message: Message, callback_data: OpenDocsCallback, bot: Bot, state: FSMContext):
     await bot.send_chat_action(message.chat.id, ChatAction.UPLOAD_DOCUMENT)
-    
+
     pickup_application_file = BufferedInputFile(
         download_file('docs', 'application_pickup.doc'),
         filename='Заявка_на_автовыгрузку_контейнера.doc'

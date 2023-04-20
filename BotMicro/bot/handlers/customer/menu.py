@@ -2,14 +2,15 @@ from aiogram import Bot, Router
 from aiogram.fsm.context import FSMContext
 from aiogram.types import CallbackQuery, Message
 
-from bot.callbacks.menu import OpenMenuCallback
-from bot.keyboards.complex import start_complex_btns
-from bot.keyboards.container_pickup import start_container_pickup_btns
-from bot.keyboards.docs import open_docs_btns
-from bot.keyboards.partnership import start_partnership_btns
+from bot.callbacks.customer.menu import OpenMenuCallback
+from bot.keyboards.customer.callback import start_callback_btns
+from bot.keyboards.customer.complex import start_complex_btns
+from bot.keyboards.customer.container_pickup import start_container_pickup_btns
+from bot.keyboards.customer.docs import open_docs_btns
+from bot.keyboards.customer.partnership import start_partnership_btns
+from bot.keyboards.customer.website import website_btns
+from bot.keyboards.customer.work import start_work_btns
 from bot.keyboards.utils import kb_from_btns
-from bot.keyboards.website import website_btns
-from bot.keyboards.work import start_work_btns
 from bot.messages.customer.menu import TITLE
 from bot.utils.init_message import edit_init_message
 
@@ -26,6 +27,7 @@ async def open_menu_handler(query: CallbackQuery, message: Message, callback_dat
             start_complex_btns(),
             start_partnership_btns(),
             start_work_btns(),
+            start_callback_btns(),
             open_docs_btns(),
             website_btns()
         )

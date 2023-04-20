@@ -1,6 +1,6 @@
 from aiogram.types import InlineKeyboardButton
 
-from bot.callbacks.menu import OpenMenuCallback
+from bot.callbacks.customer.menu import OpenMenuCallback
 
 
 def open_menu_btns():
