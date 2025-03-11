@@ -21,3 +21,9 @@ starlette==0.26.1 ; python_version >= "3.9" and python_version < "4.0"
 typing-extensions==4.5.0 ; python_version >= "3.9" and python_version < "4.0"
 ujson==4.3.0 ; python_version >= "3.9" and python_version < "4.0"
 yarl==1.8.2 ; python_version >= "3.9" and python_version < "4.0"
+Deta
+getenv
+create_bot
+create_dispatcher
+create_app
+telebot
