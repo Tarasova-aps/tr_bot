@@ -1,3 +1,21 @@
+import telebot
+
+bot = telebot.TeleBot('6271780599:AAEV_zB7To_jQLdhxbPA6wKP01pzVOB6xZQ')
+
+@bot.message_handler(commands=['start'])
+def start_message(message):
+    try:
+        bot.send_message(message.chat.id, 'Привет!')
+        #код который может вызвать ошибку.
+        open("nofile.txt", "r")
+
+    except FileNotFoundError:
+        bot.send_message(message.chat.id, "Произошла ошибка, файл не найден.")
+    except Exception as e:
+        bot.send_message(message.chat.id, f"Произошла непредвиденная ошибка: {e}")
+
+bot.polling(none_stop=True) 
+
 from os import getenv
 
 from deta import Deta
